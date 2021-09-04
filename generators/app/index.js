@@ -3,18 +3,18 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 
+/**
+ * Main generator for lit-ts yeoman generator.
+ */
 module.exports = class extends Generator {
-  prompting() {
-    // Have Yeoman greet the user.
+  async prompting() {
     this.log(
       yosay(
         `Welcome to the ${chalk.red('generator-lit-ts')} generator!`
       )
     );
 
-    const prompts = [];
-
-    this.argument('elementName', {
+   this.argument('elementName', {
       desc: 'Name of the element in dashed format e.g. my-element.',
       type: String,
       required: true
@@ -26,32 +26,78 @@ module.exports = class extends Generator {
       type: String
     });
 
-    return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
-      this.props = props;
-      this.options.elementClass = elementNameToClassName(this.options.elementName);
+    this.option('directory', {
+      desc: 'Whether to generate a directory for the element.',
+      alias: 'd',
+      type: Boolean,
+      default: true
     });
+
+    this.props = new Properties(this.options);
   }
 
   writing() {
-    const {elementName, elementClass} = this.options;
-    const properties = getProperties(this.options.properties);
     this.fs.copyTpl(
       this.templatePath('element.ts'),
-      this.destinationPath(`${this.options.elementName}.ts`),
-      {elementName, elementClass, properties}
+      this.destinationPath(this.props.elementFile),
+      this.props
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('element-test.ts'),
+      this.destinationPath(this.props.elementTestFile),
+      this.props
     );
   }
-
-  install() {
-    this.installDependencies();
-  }
-};
-
-function elementNameToClassName(name) {
-  const capitalized = name.replace(/^(\w)/, (m, n) => n.toUpperCase());
-  return capitalized.replaceAll(/-(\w)/g, (m, current) => current.toUpperCase());
 }
+
+class Properties {
+  constructor(props) {
+    const {elementName, properties, directory} = props;
+    this.elementName = elementName;
+    this.inputProperties = properties;
+    this.directory = directory;
+  }
+
+  get elementFile() {
+    const dir = this.directory ? this.elementName + '/' : '';
+    return dir + this.elementName + '.ts';
+  }
+
+  get elementClass() {
+    const capitalized = this.elementName.replace(/^(\w)/, (m, n) => n.toUpperCase());
+    return capitalized.replaceAll(/-(\w)/g, (m, current) => current.toUpperCase());
+  }
+
+  get elementTestFile() {
+    const dir = this.directory ? this.elementName + '/' : '';
+    return dir + this.elementName + '-test.ts';
+  }
+
+  get properties() {
+    if (!this.inputProperties?.length) {
+      return [];
+    }
+  
+    const props = this.inputProperties.split(' ');
+  
+    return props.map(pString => {
+      const [name, typeCode] = pString.split(':');
+      return {name, tsType: TS_TYPES[typeCode], litType: LIT_TYPES[typeCode]};
+    });
+    }
+
+    toObject() {
+      return {
+        properties: this.properties,
+        elementClass: this.elementClass,
+        elementTestFile: this.elementTestFile,
+        elementFile: this.elementFile,
+        directory: this.directory,
+        elementName: this.elementName,
+      }
+    }
+};
 
 const TS_TYPES = {
   'o': '{}',
@@ -76,16 +122,3 @@ const LIT_TYPES = {
   'number': 'Number',
   'Number': 'Number',
 };
-
-function getProperties(properties) {
-  if (!properties?.length) {
-    return [];
-  }
-
-  const props = properties.split(' ');
-
-  return props.map(pString => {
-    const [name, typeCode] = pString.split(':');
-    return {name, tsType: TS_TYPES[typeCode], litType: LIT_TYPES[typeCode]};
-  });
-}
