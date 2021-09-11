@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../tournament-manager-lit"
 		}
 	],
 	"settings": {}

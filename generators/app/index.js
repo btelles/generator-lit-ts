@@ -15,7 +15,7 @@ module.exports = class extends Generator {
     );
 
    this.argument('elementName', {
-      desc: 'Name of the element in dashed format e.g. my-element.',
+      desc: 'Name of the element in dashed format e.g. <%= elementName %>.',
       type: String,
       required: true
     });
