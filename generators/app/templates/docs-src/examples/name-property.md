@@ -1,15 +1,15 @@
 ---
 layout: example.11ty.cjs
-title: <<%= elementName %>> ⌲ Examples ⌲ Name Property
+title: <<%= props.elementName %>> ⌲ Examples ⌲ <%= propertyName %> Property
 tags: example
-name: Name Property
-description: Setting the name property
+name: <%= propertyName %> Property
+description: Setting the <%=propertyName %> property
 ---
 
-<<%= elementName %> name="Earth"></<%= elementName %>>
+<<%= props.elementName %> <%=propertyName %>="<%= propertyValue %>"></<%= props.elementName %>>
 
 <h3>HTML</h3>
 
 ```html
-<<%= elementName %> name="Earth"></<%= elementName %>>
+<<%= props.elementName %> <%=propertyName%>="<%= propertyValue %>"></<%= props.elementName %>>
 ```

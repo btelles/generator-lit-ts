@@ -1,22 +1,22 @@
 ---
 layout: page.11ty.cjs
-title: <<%= elementName %>> ⌲ Install
+title: <my-meme-element> ⌲ Install
 ---
 
 # Install
 
-`<<%= elementName %>>` is distributed on npm, so you can install it locally or use it via npm CDNs like unpkg.com.
+`<my-meme-element>` is distributed on npm, so you can install it locally or use it via npm CDNs like unpkg.com.
 
 ## Local Installation
 
 ```bash
-npm i <%= elementName %>
+npm i my-meme-element
 ```
 or
 
 
 ```bash
-yarn add <%= elementName %>
+yarn add my-meme-element
 ```
 ## CDN
 
@@ -27,11 +27,11 @@ For this element to work from unpkg.com specifically, you need to include the `?
 ### HTML
 
 ```html
-<script type="module" src="https://unpkg.com/<%= elementName %>?module"></script>
+<script type="module" src="https://unpkg.com/my-meme-element?module"></script>
 ```
 
 ### JavaScript
 
 ```html
-import {<%= elementClass %>} from 'https://unpkg.com/<%= elementName %>?module';
+import {MyMemeElement} from 'https://unpkg.com/my-meme-element?module';
 ```

@@ -9,6 +9,7 @@
     "lit-ts",
     "my-meme-element",
     "-d",
+    "--docs",
     "-p",
     "me:s you:n"
   ],

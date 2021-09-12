@@ -1,30 +1,30 @@
 {
-  "name": "@btelles/<%= elementName %>",
+  "name": "@btelles/my-meme-element",
   "private": true,
   "version": "0.0.0",
   "description": "",
-  "main": "<%= elementName %>.js",
-  "module": "<%= elementName %>.js",
+  "main": "my-meme-element.js",
+  "module": "my-meme-element.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "clean": "rimraf <%= elementName %>.{d.ts,d.ts.map,js,js.map} test/<%= elementName %>.{d.ts,d.ts.map,js,js.map} test/<%= elementName %>_test.{d.ts,d.ts.map,js,js.map}",
-<% if (docs) { %>    "docs": "npm run docs:clean && npm run build && npm run analyze && npm run docs:build && npm run docs:assets && npm run docs:gen",
+    "clean": "rimraf my-meme-element.{d.ts,d.ts.map,js,js.map} test/my-meme-element.{d.ts,d.ts.map,js,js.map} test/my-meme-element_test.{d.ts,d.ts.map,js,js.map}",
+    "docs": "npm run docs:clean && npm run build && npm run analyze && npm run docs:build && npm run docs:assets && npm run docs:gen",
     "docs:clean": "rimraf docs",
     "docs:gen": "eleventy --config=.eleventy.cjs",
     "docs:gen:watch": "eleventy --config=.eleventy.cjs --watch",
     "docs:build": "rollup -c --file docs/my-element.bundled.js",
     "docs:assets": "cp node_modules/prismjs/themes/prism-okaidia.css docs/",
     "docs:serve": "wds --root-dir=docs --node-resolve --watch",
-<% } %>    "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
+    "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint 'src/**/*.ts'",
     "lint:lit-analyzer": "lit-analyzer",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
     "serve": "wds --watch",
     "test": "wtr",
     "test:watch": "npm run test -- --watch",
-    "checksize": "rollup -c ; cat <%= elementName %>.bundled.js | gzip -9 | wc -c ; rm <%= elementName %>.bundled.js"
+    "checksize": "rollup -c ; cat my-meme-element.bundled.js | gzip -9 | wc -c ; rm my-meme-element.bundled.js"
   },
   "keywords": [
     "web-components",
@@ -37,9 +37,9 @@
   "dependencies": {
     "lit": "^2.0.0-rc.3"
   },
-  "devDependencies": {<% if (docs) { %>
+  "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
-    "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",<% } %>
+    "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",
     "@esm-bundle/chai": "^4.1.5",
     "@open-wc/testing": "^2.5.32",
     "@open-wc/testing-karma": "^4.0.9",

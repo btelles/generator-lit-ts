@@ -31,6 +31,18 @@ module.exports = class extends Generator {
       default: true,
     });
 
+    this.option('workspace', {
+      desc: "If the element is part of a larger project that uses YARN workspaces (i.e. lives inside a packages/ directory in a monorepo), use this flag to setup the correct module paths when running `yarn serve` or `wds --watch`",
+      alias: "w",
+      type: Boolean,
+      default: false,
+    });
+    this.option('docs', {
+      desc: 'Generate a static documentation site for the element (which you can then serve through github pages). Templates and pages are placed in /docs-src,  then generated through an npm script to /docs which is intended to be checked in so that GitHub pages can serve the site from /docs on the default (master/main) branch.',
+      type: Boolean,
+      default: false
+    });
+
     this.props = new Properties(this.options);
   }
 
@@ -46,6 +58,7 @@ module.exports = class extends Generator {
       this.destinationPath(this.props.elementTestFile),
       this.props
     );
+
 
     [
       "tsconfig.json",
@@ -64,13 +77,52 @@ module.exports = class extends Generator {
         this.props
       );
     });
+    
+    if(this.props.docs) {
+      [
+        "docs-src/_data/api.11tydata.js",
+        "docs-src/_includes/example.11ty.cjs",
+        "docs-src/_includes/header.11ty.cjs",
+        "docs-src/_includes/nav.11ty.cjs",
+        "docs-src/_includes/page.11ty.cjs",
+        "docs-src/_includes/relative-path.cjs",
+        "docs-src/examples/index.md",
+        "docs-src/_README.md",
+        "docs-src/.eleventyignore",
+        "docs-src/.nojekyll",
+        "docs-src/api.11ty.cjs",
+        "docs-src/docs.css",
+        "docs-src/index.md",
+        "docs-src/install.md",
+        "docs-src/package.json",
+    ].forEach((f) => {
+      this.fs.copyTpl(
+        this.templatePath(f),
+        this.destinationPath(this.props.joinDirectoryPath(f)),
+        this.props
+      );
+    });
+    
+    this.props.properties.forEach((property) => {
+        this.fs.copyTpl(
+          this.templatePath("docs-src/examples/name-property.md"),
+          this.destinationPath(this.props.joinDirectoryPath(`docs-src/examples/${property.name}-property.md`)),
+          {
+            props: this.props,
+            propertyName: property.name,
+            propertyValue: PROPERTY_VALUES[property.litType],
+          });
+});
+}
+    
   }
 };
 
 class Properties {
   constructor(props) {
-    const { elementName, properties, directory } = props;
+    const { elementName, properties, directory, docs } = props;
     this.elementName = elementName;
+    this.docs = docs;
     this.inputProperties = properties;
     this.directory = directory;
   }
@@ -137,3 +189,9 @@ const LIT_TYPES = {
   number: "Number",
   Number: "Number",
 };
+
+const PROPERTY_VALUES = {
+  "Object": "{someObject: 'with value'}",
+  "String": "Some String",
+  "Number": "3"
+}

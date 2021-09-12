@@ -1,4 +1,4 @@
-# <%= elementName %>
+# my-meme-element
 
 ## Setup
 
@@ -80,7 +80,7 @@ npm run lint
 
 Prettier has not been configured to run when committing files, but this can be added with Husky and and `pretty-quick`. See the [prettier.io](https://prettier.io/) site for instructions.
 
-<% if (docs) {%>
+
 ## Static Site
 
 This project includes a simple website generated with the [eleventy](11ty.dev) static site generator and the templates and pages in `/docs-src`. The site is generated to `/docs` and intended to be checked in so that GitHub pages can serve the site [from `/docs` on the master branch](https://help.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
@@ -106,4 +106,3 @@ npm run docs:watch
 ```
 
 The site will usually be served at http://localhost:8000.
-<% } %>
