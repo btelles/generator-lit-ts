@@ -48,69 +48,70 @@ module.exports = class extends Generator {
 
   writing() {
     this.fs.copyTpl(
-      this.templatePath("src/element.ts"),
+      this.templatePath("src/element.ts.ejs"),
       this.destinationPath(this.props.elementFile),
       this.props
     );
 
     this.fs.copyTpl(
-      this.templatePath("src/element-test.ts"),
+      this.templatePath("src/element-test.ts.ejs"),
       this.destinationPath(this.props.elementTestFile),
       this.props
     );
 
 
     [
-      "tsconfig.json",
-      "dev/index.html",
-      "dev/README.md",
-      "LICENSE",
-      "package.json",
-      "README.md",
-      "rollup.config.js",
-      "web-dev-server.config.js",
-      "web-test-runner.config.js",
+      "tsconfig.json.ejs",
+      "dev/index.html.ejs",
+      "dev/README.md.ejs",
+      "LICENSE.ejs",
+      "package.json.ejs",
+      "README.md.ejs",
+      "rollup.config.js.ejs",
+      "web-dev-server.config.js.ejs",
+      "web-test-runner.config.js.ejs",
     ].forEach((f) => {
       this.fs.copyTpl(
         this.templatePath(f),
-        this.destinationPath(this.props.joinDirectoryPath(f)),
+        this.destinationPath(this.props.joinDirectoryPath(f.replace('.ejs',''))),
         this.props
       );
     });
     
     if(this.props.docs) {
       [
-        "docs-src/_data/api.11tydata.js",
-        "docs-src/_includes/example.11ty.cjs",
-        "docs-src/_includes/header.11ty.cjs",
-        "docs-src/_includes/nav.11ty.cjs",
-        "docs-src/_includes/page.11ty.cjs",
-        "docs-src/_includes/relative-path.cjs",
-        "docs-src/examples/index.md",
-        "docs-src/_README.md",
-        "docs-src/.eleventyignore",
-        "docs-src/.nojekyll",
-        "docs-src/api.11ty.cjs",
-        "docs-src/docs.css",
-        "docs-src/index.md",
-        "docs-src/install.md",
-        "docs-src/package.json",
+        "docs-src/_data/api.11tydata.js.ejs",
+        "docs-src/_includes/example.11ty.cjs.ejs",
+        "docs-src/_includes/header.11ty.cjs.ejs",
+        "docs-src/_includes/nav.11ty.cjs.ejs",
+        "docs-src/_includes/page.11ty.cjs.ejs",
+        "docs-src/_includes/relative-path.cjs.ejs",
+        "docs-src/examples/index.md.ejs",
+        "docs-src/_README.md.ejs",
+        "docs-src/.eleventyignore.ejs",
+        "docs-src/.nojekyll.ejs",
+        "docs-src/api.11ty.cjs.ejs",
+        "docs-src/docs.css.ejs",
+        "docs-src/index.md.ejs",
+        "docs-src/install.md.ejs",
+        "docs-src/package.json.ejs",
+        ".eleventy.cjs.ejs",
     ].forEach((f) => {
       this.fs.copyTpl(
         this.templatePath(f),
-        this.destinationPath(this.props.joinDirectoryPath(f)),
+        this.destinationPath(this.props.joinDirectoryPath(f.replace('.ejs',''))),
         this.props
       );
     });
     
     this.props.properties.forEach((property) => {
         this.fs.copyTpl(
-          this.templatePath("docs-src/examples/name-property.md"),
+          this.templatePath("docs-src/examples/name-property.md.ejs"),
           this.destinationPath(this.props.joinDirectoryPath(`docs-src/examples/${property.name}-property.md`)),
           {
             props: this.props,
             propertyName: property.name,
-            propertyValue: PROPERTY_VALUES[property.litType],
+            propertyValue: property.value,
           });
 });
 }
@@ -120,11 +121,12 @@ module.exports = class extends Generator {
 
 class Properties {
   constructor(props) {
-    const { elementName, properties, directory, docs } = props;
+    const { elementName, properties, directory, docs, workspace } = props;
     this.elementName = elementName;
     this.docs = docs;
     this.inputProperties = properties;
     this.directory = directory;
+    this.workspace = workspace;
   }
 
   get elementFile() {
@@ -153,12 +155,22 @@ class Properties {
 
     return props.map((pString) => {
       const [name, typeCode] = pString.split(":");
-      return { name, tsType: TS_TYPES[typeCode], litType: LIT_TYPES[typeCode] };
+      return {
+        name, tsType: TS_TYPES[typeCode], 
+        litType: LIT_TYPES[typeCode], 
+        value: PROPERTY_VALUES[LIT_TYPES[typeCode]] 
+      };
     });
   }
 
   get directoryPath() {
     return this.directory ? this.elementName + "/" : "";
+  }
+
+  get propertiesAsAttributes() {
+    return this.properties
+      .map(p => `${p.name}="${p.value}"`)
+      .join(' ');
   }
 
   joinDirectoryPath(fileName) {

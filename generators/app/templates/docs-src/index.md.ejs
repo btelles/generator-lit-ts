@@ -12,7 +12,7 @@ title: <<%= elementName %>> ⌲ Home
 <section class="columns">
   <div>
 
-`<<%= elementName %>>` is just an HTML element. You can it anywhere you can use HTML!
+`<<%= elementName %>>` is just an HTML element. You can use it anywhere you can use HTML!
 
 ```html
 <<%= elementName %>></<%= elementName %>>
@@ -31,7 +31,7 @@ title: <<%= elementName %>> ⌲ Home
 <section class="columns">
   <div>
 
-`<<%= elementName %>>` can be configured with attributed in plain HTML.
+`<<%= elementName %>>` can be configured with attributes in plain HTML.
 
 ```html
 <<%= elementName %> name="HTML"></<%= elementName %>>
@@ -60,7 +60,7 @@ const name = 'lit-html';
 render(
   html`
     <h2>This is a &lt;<%= elementName %>&gt;</h2>
-    <<%= elementName %> .name=${name}></<%= elementName %>>
+    <<%= elementName %> <%= propertiesAsAttributes %>></<%= elementName %>>
   `,
   document.body
 );
@@ -70,7 +70,7 @@ render(
   <div>
 
 <h2>This is a &lt;<%= elementName %>&gt;</h2>
-<<%= elementName %> name="lit-html"></<%= elementName %>>
+<<%= elementName %> <%= propertiesAsAttributes %>></<%= elementName %>>
 
   </div>
 </section>

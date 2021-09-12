@@ -3,7 +3,7 @@ import {LitElement, html, css} from 'lit';
 import {customElement<% if (properties.length) { %>, property<% } %>} from 'lit/decorators.js';
 
 /**
- * 
+ * Please explain why this element exists.
  */
 @customElement('<%= elementName %>')
 export class <%= elementClass %> extends LitElement {
@@ -11,6 +11,7 @@ export class <%= elementClass %> extends LitElement {
 
   `;
   <% properties.forEach(p => { %>
+    /** Please explain why this property exists. */
     @property({type: <%= p.litType %>})
     <%= p.name %>: <%= p.tsType %>;
   <%})%>
