@@ -7,38 +7,43 @@ const yosay = require("yosay");
  * Main generator for lit-ts yeoman generator.
  */
 module.exports = class extends Generator {
-  async prompting() {
+  constructor(args, opts) {
+    super(args, opts);
+
     this.log(
       yosay(`Welcome to the ${chalk.red("generator-lit-ts")} generator!`)
     );
 
     this.argument("elementName", {
-      desc: "Name of the element in dashed format e.g. <%= elementName %>.",
+      desc: "Name of the element in dashed format e.g. my-cool-element.",
       type: String,
-      required: true,
+      required: true
     });
 
     this.option("properties", {
-      desc: "Properties to be added to the element in propertyName:type format where type can be String, Number, Boolean, Array, and Object OR s,n,b,a,o",
+      desc:
+        "Properties to be added to the element in propertyName:type format where type can be String, Number, Boolean, Array, and Object OR s,n,b,a,o",
       alias: "p",
-      type: String,
+      type: String
     });
 
     this.option("directory", {
       desc: "Whether to generate a directory for the element.",
       alias: "d",
       type: Boolean,
-      default: true,
+      default: true
     });
 
-    this.option('workspace', {
-      desc: "If the element is part of a larger project that uses YARN workspaces (i.e. lives inside a packages/ directory in a monorepo), use this flag to setup the correct module paths when running `yarn serve` or `wds --watch`",
+    this.option("workspace", {
+      desc:
+        "If the element is part of a larger project that uses YARN workspaces (i.e. lives inside a packages/ directory in a monorepo), use this flag to setup the correct module paths when running `yarn serve` or `wds --watch`",
       alias: "w",
       type: Boolean,
-      default: false,
+      default: false
     });
-    this.option('docs', {
-      desc: 'Generate a static documentation site for the element (which you can then serve through github pages). Templates and pages are placed in /docs-src,  then generated through an npm script to /docs which is intended to be checked in so that GitHub pages can serve the site from /docs on the default (master/main) branch.',
+    this.option("docs", {
+      desc:
+        "Generate a static documentation site for the element (which you can then serve through github pages). Templates and pages are placed in /docs-src,  then generated through an npm script to /docs which is intended to be checked in so that GitHub pages can serve the site from /docs on the default (master/main) branch.",
       type: Boolean,
       default: false
     });
@@ -59,7 +64,6 @@ module.exports = class extends Generator {
       this.props
     );
 
-
     [
       "tsconfig.json.ejs",
       "dev/index.html.ejs",
@@ -69,16 +73,18 @@ module.exports = class extends Generator {
       "README.md.ejs",
       "rollup.config.js.ejs",
       "web-dev-server.config.js.ejs",
-      "web-test-runner.config.js.ejs",
-    ].forEach((f) => {
+      "web-test-runner.config.js.ejs"
+    ].forEach(f => {
       this.fs.copyTpl(
         this.templatePath(f),
-        this.destinationPath(this.props.joinDirectoryPath(f.replace('.ejs',''))),
+        this.destinationPath(
+          this.props.joinDirectoryPath(f.replace(".ejs", ""))
+        ),
         this.props
       );
     });
-    
-    if(this.props.docs) {
+
+    if (this.props.docs) {
       [
         "docs-src/_data/api.11tydata.js.ejs",
         "docs-src/_includes/example.11ty.cjs.ejs",
@@ -95,27 +101,33 @@ module.exports = class extends Generator {
         "docs-src/index.md.ejs",
         "docs-src/install.md.ejs",
         "docs-src/package.json.ejs",
-        ".eleventy.cjs.ejs",
-    ].forEach((f) => {
-      this.fs.copyTpl(
-        this.templatePath(f),
-        this.destinationPath(this.props.joinDirectoryPath(f.replace('.ejs',''))),
-        this.props
-      );
-    });
-    
-    this.props.properties.forEach((property) => {
+        ".eleventy.cjs.ejs"
+      ].forEach(f => {
+        this.fs.copyTpl(
+          this.templatePath(f),
+          this.destinationPath(
+            this.props.joinDirectoryPath(f.replace(".ejs", ""))
+          ),
+          this.props
+        );
+      });
+
+      this.props.properties.forEach(property => {
         this.fs.copyTpl(
           this.templatePath("docs-src/examples/name-property.md.ejs"),
-          this.destinationPath(this.props.joinDirectoryPath(`docs-src/examples/${property.name}-property.md`)),
+          this.destinationPath(
+            this.props.joinDirectoryPath(
+              `docs-src/examples/${property.name}-property.md`
+            )
+          ),
           {
             props: this.props,
             propertyName: property.name,
-            propertyValue: property.value,
-          });
-});
-}
-    
+            propertyValue: property.value
+          }
+        );
+      });
+    }
   }
 };
 
@@ -153,12 +165,13 @@ class Properties {
 
     const props = this.inputProperties.split(" ");
 
-    return props.map((pString) => {
+    return props.map(pString => {
       const [name, typeCode] = pString.split(":");
       return {
-        name, tsType: TS_TYPES[typeCode], 
-        litType: LIT_TYPES[typeCode], 
-        value: PROPERTY_VALUES[LIT_TYPES[typeCode]] 
+        name,
+        tsType: TS_TYPES[typeCode],
+        litType: LIT_TYPES[typeCode],
+        value: PROPERTY_VALUES[LIT_TYPES[typeCode]]
       };
     });
   }
@@ -168,9 +181,7 @@ class Properties {
   }
 
   get propertiesAsAttributes() {
-    return this.properties
-      .map(p => `${p.name}="${p.value}"`)
-      .join(' ');
+    return this.properties.map(p => `${p.name}="${p.value}"`).join(" ");
   }
 
   joinDirectoryPath(fileName) {
@@ -187,7 +198,7 @@ const TS_TYPES = {
   s: "string",
   n: "number",
   number: "number",
-  Number: "number",
+  Number: "number"
 };
 
 const LIT_TYPES = {
@@ -199,11 +210,11 @@ const LIT_TYPES = {
   s: "String",
   n: "Number",
   number: "Number",
-  Number: "Number",
+  Number: "Number"
 };
 
 const PROPERTY_VALUES = {
-  "Object": "{someObject: 'with value'}",
-  "String": "Some String",
-  "Number": "3"
-}
+  Object: "{someObject: 'with value'}",
+  String: "Some String",
+  Number: "3"
+};
