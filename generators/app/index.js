@@ -21,8 +21,9 @@ module.exports = class extends Generator {
     });
 
     this.option("properties", {
-      desc:
-        "Properties to be added to the element in propertyName:type format where type can be String, Number, Boolean, Array, and Object OR s,n,b,a,o",
+      desc: `Properties to be added to the element in 
+                          propertyName:type format where type can be
+                          String, Number, Boolean, Array, and Object OR s,n,b,a,o`,
       alias: "p",
       type: String
     });
@@ -35,15 +36,23 @@ module.exports = class extends Generator {
     });
 
     this.option("workspace", {
-      desc:
-        "If the element is part of a larger project that uses YARN workspaces (i.e. lives inside a packages/ directory in a monorepo), use this flag to setup the correct module paths when running `yarn serve` or `wds --watch`",
+      desc: `If the element is part of a larger project that
+                          uses YARN workspaces (i.e. lives inside a 
+                          packages/ directory in a monorepo), use this flag 
+                          to setup the correct module paths when running 
+                          \`yarn serve\` or \`wds --watch\``,
       alias: "w",
       type: Boolean,
       default: false
     });
     this.option("docs", {
-      desc:
-        "Generate a static documentation site for the element (which you can then serve through github pages). Templates and pages are placed in /docs-src,  then generated through an npm script to /docs which is intended to be checked in so that GitHub pages can serve the site from /docs on the default (master/main) branch.",
+      desc: `Generate a static documentation site for the 
+                          element (which you can then serve through github
+                          pages). Templates and pages are placed in /docs-src,
+                          then generated through an npm script to /docs which
+                          is intended to be checked in so that GitHub pages
+                          can serve the site from /docs on the default
+                          (master/main) branch.`,
       type: Boolean,
       default: false
     });
@@ -196,6 +205,9 @@ const TS_TYPES = {
   String: "string",
   string: "string",
   s: "string",
+  a: "Array",
+  array: "Array",
+  Array: "Array",
   n: "number",
   number: "number",
   Number: "number"
@@ -208,6 +220,9 @@ const LIT_TYPES = {
   String: "String",
   string: "String",
   s: "String",
+  a: "Array",
+  array: "Array",
+  Array: "Array",
   n: "Number",
   number: "Number",
   Number: "Number"
@@ -215,6 +230,7 @@ const LIT_TYPES = {
 
 const PROPERTY_VALUES = {
   Object: "{someObject: 'with value'}",
+  Array: "[]",
   String: "Some String",
   Number: "3"
 };
