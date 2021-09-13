@@ -29,18 +29,20 @@ module.exports = class extends Generator {
     });
 
     this.option("directory", {
-      desc: "Whether to generate a directory for the element.",
+      desc: `Create a directory for the element and
+                          generated files (recommended).`,
       alias: "d",
       type: Boolean,
       default: true
     });
 
     this.option("workspace", {
-      desc: `If the element is part of a larger project that
-                          uses YARN workspaces (i.e. lives inside a 
-                          packages/ directory in a monorepo), use this flag 
-                          to setup the correct module paths when running 
-                          \`yarn serve\` or \`wds --watch\``,
+      desc: `Use this flag to setup correct module paths if the element 
+                          is part of a larger project that uses YARN or Lerna
+                          workspaces (i.e. if the element will live inside a
+                          packages/ directory in a monorepo). This is important
+                          for web-dev-server-config and if you use webpack in the
+                          parent project.`,
       alias: "w",
       type: Boolean,
       default: false
