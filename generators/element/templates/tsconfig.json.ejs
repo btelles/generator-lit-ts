@@ -1,13 +1,15 @@
 {
+<% if (workspace) {%>  "extends": "../../tsconfig.json",<% } %>
   "compilerOptions": {
     "target": "es2019",
     "module": "es2020",
     "lib": ["es2020", "DOM", "DOM.Iterable"],
+    <% if (workspace) {%>  "composite": true,<% } %>
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "inlineSources": true,
-    "outDir": "./",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "noUnusedLocals": true,

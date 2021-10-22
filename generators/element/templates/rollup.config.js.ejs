@@ -5,9 +5,9 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 
 export default {
-  input: '<%= elementName %>.js',
+  input: 'dist/<%= elementName %>.js',
   output: {
-    file: '<%= elementName %>.bundled.js',
+    file: 'dist/<%= elementName %>.bundled.js',
     format: 'esm',
   },
   onwarn(warning) {
